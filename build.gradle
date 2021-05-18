@@ -1,0 +1,44 @@
+plugins {
+    id 'ivy-publish'
+    id 'java-gradle-plugin'
+}
+
+class MyPlugin implements Plugin<Project> {
+    @Override
+    public void apply(Project project) {
+
+        project.getPlugins().withId("ivy-publish", {
+            PublishingExtension publishingExtension = project.getExtensions().getByType(PublishingExtension.class)
+            println(project.extensions.publishing)
+            println(publishingExtension)
+            RepositoryHandler rh1 = publishingExtension.getRepositories()
+            rh1.whenObjectAdded( { repository ->
+                println(repository)
+                URI uri = repository.getUrl()
+                println(uri)
+            })
+        })
+/*
+        project.getPlugins().withId("ivy-publish", {
+            def exts = project.extensions
+            def publishingExt = exts.publishing
+            RepositoryHandler rh = publishingExt.repositories
+            rh.whenObjectAdded( {
+                println(it.class)
+                println(it.url.class)
+            })
+        })
+*/
+    }
+}
+
+apply plugin: MyPlugin
+
+publishing {
+    repositories {
+        ivy {
+            url = "https://a.b.c/"
+        }
+    }
+}
+
