@@ -1,44 +1,27 @@
 plugins {
-    id 'ivy-publish'
+    id 'groovy'
     id 'java-gradle-plugin'
 }
 
-class MyPlugin implements Plugin<Project> {
-    @Override
-    public void apply(Project project) {
+group = "random"
+version = "1.1.1"
 
-        project.getPlugins().withId("ivy-publish", {
-            PublishingExtension publishingExtension = project.getExtensions().getByType(PublishingExtension.class)
-            println(project.extensions.publishing)
-            println(publishingExtension)
-            RepositoryHandler rh1 = publishingExtension.getRepositories()
-            rh1.whenObjectAdded( { repository ->
-                println(repository)
-                URI uri = repository.getUrl()
-                println(uri)
-            })
-        })
-/*
-        project.getPlugins().withId("ivy-publish", {
-            def exts = project.extensions
-            def publishingExt = exts.publishing
-            RepositoryHandler rh = publishingExt.repositories
-            rh.whenObjectAdded( {
-                println(it.class)
-                println(it.url.class)
-            })
-        })
-*/
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    testImplementation("org.spockframework:spock-core:1.3-groovy-2.5") {
+        exclude module: "groovy-all"
     }
 }
 
-apply plugin: MyPlugin
-
-publishing {
-    repositories {
-        ivy {
-            url = "https://a.b.c/"
+gradlePlugin {
+    plugins {
+        randomPlugin {
+            id = "random.MyPlugin"
+            implementationClass = "random.MyPlugin"
         }
     }
 }
-
