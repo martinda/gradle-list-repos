@@ -15,6 +15,7 @@ public class MyPluginTest extends Specification {
 
     def "test1"() {
         setup:
+        testProjectDir.create()
         buildFile = testProjectDir.newFile("build.gradle")
         buildFile << """
             plugins {
