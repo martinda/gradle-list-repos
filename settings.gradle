@@ -1,0 +1,7 @@
+pluginManagement {
+    repositories {
+        ivy {
+            url './my-ivy-repo'
+        }
+    }
+}

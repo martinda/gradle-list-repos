@@ -22,6 +22,10 @@ gradlePlugin {
             id = "random.MyPlugin"
             implementationClass = "random.MyPlugin"
         }
+        randomSettingsPlugin {
+            id = "random.MySettingsPlugin"
+            implementationClass = "random.MySettingsPlugin"
+        }
     }
 }
 

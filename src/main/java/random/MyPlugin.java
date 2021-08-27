@@ -19,16 +19,23 @@ public class MyPlugin implements Plugin<Project> {
             publishingExtension.getRepositories().whenObjectAdded( repository -> {//new Action<? super IvyArtifactRepository>() {
                     //URI uri = action.getUrl();
                     // We have the repository object here, how to cast it?
-                    if (repository instanceof IvyArtifactRepository) {
-                        IvyArtifactRepository ivy = (IvyArtifactRepository)repository;
-                        System.out.println("URL: " + ivy.getUrl());
-                    }
                     System.out.println("Action: " + repository.toString());
                     System.out.println("Action: " + repository.toString());
                     System.out.println(repository instanceof IvyArtifactRepository);
                     System.out.println(repository instanceof ArtifactRepository);
+                    if (repository instanceof IvyArtifactRepository) {
+                        IvyArtifactRepository ivy = (IvyArtifactRepository)repository;
+                        System.out.println("URL: " + ivy.getUrl());
+                    }
                 });
             });
+        project.getRepositories().whenObjectAdded( repository -> {
+            System.out.println("Project repository: " + repository.toString());
+            if (repository instanceof IvyArtifactRepository) {
+                IvyArtifactRepository ivy = (IvyArtifactRepository)repository;
+                System.out.println("URL: " + ivy.getUrl());
+            }
+        });
 /*
         project.getPlugins().withId("ivy-publish", {
             PublishingExtension publishingExtension = project.getExtensions().getByType(PublishingExtension.class)

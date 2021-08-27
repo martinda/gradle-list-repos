@@ -13,7 +13,7 @@ public class MyPluginTest extends Specification {
 
     File buildFile
 
-    def "test1"() {
+    def "Test project plugin"() {
         setup:
         testProjectDir.create()
         buildFile = testProjectDir.newFile("build.gradle")
@@ -21,6 +21,11 @@ public class MyPluginTest extends Specification {
             plugins {
                 id 'ivy-publish'
                 id 'random.MyPlugin'
+            }
+            repositories {
+                ivy {
+                    url 'resolution-repository'
+                }
             }
             publishing {
                 repositories {
@@ -41,6 +46,40 @@ public class MyPluginTest extends Specification {
 
        then:
        println(result.output)
+       result.task(":tasks").outcome == SUCCESS
+    }
+
+    def "Test settings plugin"() {
+        setup:
+        testProjectDir.create()
+        File settingsFile = testProjectDir.newFile("settings.gradle")
+        settingsFile << """
+            pluginManagement {
+                repositories {
+                    maven {
+                       url 'https://ciena.com/my-maven'
+                    }
+                    ivy {
+                       url 'https://ciena.com/my-ivy'
+                    }
+                    gradlePluginPortal()
+                }
+                plugins {
+                    id 'random.MySettingsPlugin'
+                }
+            }
+            println("Inside settings")
+            """
+       when:
+       def result = GradleRunner.create()
+           .withProjectDir(testProjectDir.root)
+           .withArguments(["--stacktrace", "tasks"])
+           .withPluginClasspath()
+           .build()
+
+       then:
+       println(result.output)
+       result.output.contains("Applying MySettingsPlugin")
        result.task(":tasks").outcome == SUCCESS
     }
 }
