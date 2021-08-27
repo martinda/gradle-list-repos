@@ -1,7 +1,1 @@
-pluginManagement {
-    repositories {
-        ivy {
-            url './my-ivy-repo'
-        }
-    }
-}
+rootProject.name = "gradle-list-repos"
